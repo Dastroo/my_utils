@@ -21,6 +21,8 @@ namespace mutl {
         return ss.str();
     }
 
+    std::string format_with_comma(std::initializer_list<std::string> list);
+
     template<typename T>
     inline std::string format_with_comma(const std::vector<T> &v) {
         std::stringstream ss;

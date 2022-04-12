@@ -16,6 +16,15 @@ std::string mutl::to_lower(char c) {
     return std::string(1, (char) std::tolower(c));
 }
 
+std::string mutl::format_with_comma(std::initializer_list<std::string> list) {
+    std::stringstream ss;
+    ss << *list.begin();
+    std::initializer_list<std::string>::iterator it;
+    for (it = list.begin() + 1; it != list.end(); ++it)
+        ss << ", " << *it;
+    return ss.str();
+}
+
 std::string mutl::format_with_comma(const std::string &s) {
     return s;
 }

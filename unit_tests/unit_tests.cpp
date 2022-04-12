@@ -22,6 +22,12 @@ TEST_CASE("to_lower") {
 }
 
 TEST_CASE(R"(format_param_with_comma)") {
+    SUBCASE(R"(format_with_comma(std::initializer_list<std::string> list))") {
+        CHECK_EQ(mutl::format_with_comma({"a"}), "a");
+        CHECK_EQ(mutl::format_with_comma({"a", "b"}), "a, b");
+        CHECK_EQ(mutl::format_with_comma({"a", "b", "c"}), "a, b, c");
+    }
+
     SUBCASE(R"(format_param_with_comma(const std::vector<T> &v))") {
         std::vector<std::string> v;
         v.emplace_back("abc");
