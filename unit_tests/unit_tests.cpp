@@ -22,21 +22,17 @@ TEST_CASE("to_lower") {
 }
 
 TEST_CASE(R"(format_param_with_comma)") {
-    SUBCASE(R"(format_with_comma(std::initializer_list<std::string> list))") {
-        CHECK_EQ(mutl::format_with_comma({"a"}), "a");
-        CHECK_EQ(mutl::format_with_comma({"a", "b"}), "a, b");
-        CHECK_EQ(mutl::format_with_comma({"a", "b", "c"}), "a, b, c");
-    }
+    SUBCASE(R"(format_param_with_comma(const std::vector<T1, T2> &v))") {
+        std::vector<std::pair<std::string, std::string>> v;
+        v.emplace_back(std::make_pair("a", "b"));
 
-    SUBCASE(R"(format_param_with_comma(const std::vector<T> &v))") {
-        std::vector<std::string> v;
-        v.emplace_back("abc");
-        std::vector<std::string> v2;
-        v2.emplace_back("abc");
-        v2.emplace_back("def");
-        v2.emplace_back("ghi");
-        CHECK_EQ(mutl::format_with_comma(v), "abc");
-        CHECK_EQ(mutl::format_with_comma(v2), "abc, def, ghi");
+        std::vector<std::pair<std::string, int>> v2;
+        v2.emplace_back(std::make_pair("a", 1));
+        v2.emplace_back(std::make_pair("b", 2));
+        CHECK_EQ(mutl::format_param_with_comma<0>(v), "a");
+        CHECK_EQ(mutl::format_param_with_comma<1>(v), "b");
+        CHECK_EQ(mutl::format_param_with_comma<0>(v2), "a, b");
+        CHECK_EQ(mutl::format_param_with_comma<1>(v2), "1, 2");
     }
 
     SUBCASE(R"(format_param_with_comma(const std::vector<std::tuple<Args...>> &v))") {
@@ -82,6 +78,25 @@ TEST_CASE(R"(format_param_with_comma)") {
         CHECK_EQ(mutl::format_param_with_comma<0>(v4), "abc, def");
         CHECK_EQ(mutl::format_param_with_comma<1>(v4), "1, 2");
     }
+}
+
+TEST_CASE(R"(format_with_comma)") {
+    SUBCASE(R"(format_with_comma(std::initializer_list<std::string> list))") {
+        CHECK_EQ(mutl::format_with_comma({"a"}), "a");
+        CHECK_EQ(mutl::format_with_comma({"a", "b"}), "a, b");
+        CHECK_EQ(mutl::format_with_comma({"a", "b", "c"}), "a, b, c");
+    }
+
+    SUBCASE(R"(format_with_comma(const std::vector<T> &v))") {
+        std::vector<std::string> v;
+        v.emplace_back("abc");
+        std::vector<std::string> v2;
+        v2.emplace_back("abc");
+        v2.emplace_back("def");
+        v2.emplace_back("ghi");
+        CHECK_EQ(mutl::format_with_comma(v), "abc");
+        CHECK_EQ(mutl::format_with_comma(v2), "abc, def, ghi");
+    }
 
     SUBCASE(R"(template<size_t begin, size_t end, typename... Args> format_with_comma(Args &&... args))") {
         std::string a = "a";
@@ -118,8 +133,6 @@ TEST_CASE(R"(format_param_with_comma)") {
         CHECK_EQ(mutl::format_with_comma(1, "b"), "1, b");
         CHECK_EQ(mutl::format_with_comma('a', "b", 1, abc), "a, b, 1, abc");
     }
-
-
 }
 
 /*

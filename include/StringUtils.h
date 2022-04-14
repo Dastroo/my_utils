@@ -21,14 +21,26 @@ namespace mutl {
         return ss.str();
     }
 
-    std::string format_with_comma(std::initializer_list<std::string> list);
-
-    template<typename T>
-    inline std::string format_with_comma(const std::vector<T> &v) {
+    /**
+     *
+     * @tparam i tuple parameter index
+     * @param v dynamic array of tuples
+     * @return comma seperated of given tuple parameter
+     * @example
+     *  std::vector\<std::tuple\<std::string, char, int>> v;\n
+        v.emplace_back(std::tuple{"abc", 'a', 1});\n
+        v.emplace_back(std::tuple{"def", 'b', 2});\n
+        v.emplace_back(std::tuple{"ghi", 'c', 3});\n
+        std::cout \<\< format_param_with_comma\<2>(v);\n
+        <b>output:</b>
+        "1, 2, 3"
+    */
+    template<size_t i, typename T1, typename T2>
+    inline std::string format_param_with_comma(const std::vector<std::pair<T1, T2>> &v) {
         std::stringstream ss;
-        ss << v[0];
-        for (int tuple = 1; tuple < v.size(); ++tuple)
-            ss << ", " << v[tuple];
+        ss << std::get<i>(v[0]);
+        for (int pair = 1; pair < v.size(); ++pair)
+            ss << ", " << std::get<i>(v[pair]);
         return ss.str();
     }
 
@@ -74,6 +86,17 @@ namespace mutl {
         ss << std::get<i>(vector[0]);
         for (int tuple = 1; tuple < vector.size(); ++tuple)
             ss << ", " << std::get<i>(vector[tuple]);
+        return ss.str();
+    }
+
+    std::string format_with_comma(std::initializer_list<std::string> list);
+
+    template<typename T>
+    inline std::string format_with_comma(const std::vector<T> &v) {
+        std::stringstream ss;
+        ss << v[0];
+        for (int tuple = 1; tuple < v.size(); ++tuple)
+            ss << ", " << v[tuple];
         return ss.str();
     }
 
