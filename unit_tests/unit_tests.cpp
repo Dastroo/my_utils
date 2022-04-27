@@ -6,10 +6,7 @@
 
 #include <fstream>
 #include "doctest.h"
-//#define private public
 #include "../include/StringUtils.h"
-#include "../include/OSUtils.h"
-//#undef private
 
 TEST_CASE("to_lower") {
     std::string s = "AbCD1";

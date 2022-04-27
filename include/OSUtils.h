@@ -4,39 +4,14 @@
 
 #pragma once
 
-#include <cstdlib>
-#include <unistd.h>
+namespace mutl {
 
-char* get_home_path() {
-#if __linux__
-    return getenv("HOME");
-#endif
-#if _WIN32
-    return getenv("USERPROFILE");
-#endif
-}
+    char *get_home_path();
 
-bool is_linux() {
-#if __linux__
-    return true;
-#else
-    return false;
-#endif
-}
+    bool is_linux();
 
-bool is_windows() {
-#if _WIN32
-    return true;
-#else
-    return false;
-#endif
-}
+    bool is_windows();
 
-bool is_elevated() {
-#if __linux__
-    return !getuid();
-#endif
-#if _WIN32
-    return // TODO: windows support
-#endif
-}
+    bool is_elevated();
+
+} // mutl
