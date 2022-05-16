@@ -6,6 +6,7 @@
 
 #include <fstream>
 #include "doctest.h"
+#include "../include/Time.h"
 #include "../include/StringUtils.h"
 
 TEST_CASE("to_lower") {
@@ -129,6 +130,25 @@ TEST_CASE(R"(format_with_comma)") {
         CHECK_EQ(mutl::format_with_comma('a', "b"), "a, b");
         CHECK_EQ(mutl::format_with_comma(1, "b"), "1, b");
         CHECK_EQ(mutl::format_with_comma('a', "b", 1, abc), "a, b, 1, abc");
+    }
+}
+
+TEST_CASE(R"(time)") {
+    using namespace mutl::time;
+
+    SUBCASE(R"(now<nanoseconds>())") {
+        std::cout << now<nano>() << std::endl;
+        std::cout << now<nanoseconds>() << std::endl;
+    }
+
+    SUBCASE(R"(now<seconds>())") {
+        std::cout << now<sec>() << std::endl;
+        std::cout << now<seconds>() << std::endl;
+    }
+
+    SUBCASE(R"(now<hours>())") {
+        std::cout << now<h>() << std::endl;
+        std::cout << now<hours>() << std::endl;
     }
 }
 
