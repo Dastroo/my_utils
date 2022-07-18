@@ -4274,7 +4274,7 @@ namespace detail {
         kinfo_proc info;
         size_t     size;
         // Initialize the flags so that, if sysctl fails for some bizarre
-        // reason, we get a predictable result.
+        // reason, we any a predictable result.
         info.kp_proc.p_flag = 0;
         // Initialize mib, which tells sysctl the info we want, in this case
         // we're looking for information about a specific process ID.

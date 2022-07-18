@@ -4,10 +4,12 @@
 // Created by dawid on 06.04.2022.
 //
 
-#include <fstream>
-#include "doctest.h"
-#include "../include/Time.h"
+#include "../include/Bit.h"
 #include "../include/StringUtils.h"
+#include "../include/Time.h"
+#include "doctest.h"
+#include <fstream>
+#include <bitset>
 
 TEST_CASE("to_lower") {
     std::string s = "AbCD1";
@@ -150,6 +152,134 @@ TEST_CASE(R"(time)") {
         std::cout << now<h>() << std::endl;
         std::cout << now<hours>() << std::endl;
     }
+}
+
+TEST_CASE(R"(bit)") {
+    using namespace mutl::bit;
+
+    SUBCASE(R"(any(uint16_t bitset, uint16_t flag))") {
+        const uint16_t bitset = 1 << 0;
+        const uint16_t bitset1 = 1 << 1;
+        const uint16_t bitset2 = 1 << 2;
+        const uint16_t bitset3 = 1 << 3;
+
+        const uint16_t flag = 1 << 0; // 0001
+        const uint16_t flag1 = 1 << 1;// 0010
+        const uint16_t flag2 = 1 << 2;// 0100
+        const uint16_t flag3 = 1 << 3;// 1000
+
+        CHECK_EQ(any(bitset, flag), true);
+        CHECK_EQ(any(bitset, flag1), false);
+        CHECK_EQ(any(bitset, flag2), false);
+        CHECK_EQ(any(bitset, flag3), false);
+
+        CHECK_EQ(any(bitset1, flag), false);
+        CHECK_EQ(any(bitset1, flag1), true);
+        CHECK_EQ(any(bitset1, flag2), false);
+        CHECK_EQ(any(bitset1, flag3), false);
+
+        CHECK_EQ(any(bitset2, flag), false);
+        CHECK_EQ(any(bitset2, flag1), false);
+        CHECK_EQ(any(bitset2, flag2), true);
+        CHECK_EQ(any(bitset2, flag3), false);
+
+        CHECK_EQ(any(bitset3, flag), false);
+        CHECK_EQ(any(bitset3, flag1), false);
+        CHECK_EQ(any(bitset3, flag2), false);
+        CHECK_EQ(any(bitset3, flag3), true);
+    }
+
+    SUBCASE(R"(set(uint16_t &bitset, uint16_t flag))") {
+        uint16_t bitset = 0;
+        uint16_t bitset1 = 0;
+        uint16_t bitset2 = 0;
+        uint16_t bitset3 = 0;
+
+        const uint16_t flag = 1 << 0; // 0001
+        const uint16_t flag1 = 1 << 1;// 0010
+        const uint16_t flag2 = 1 << 2;// 0100
+        const uint16_t flag3 = 1 << 3;// 1000
+
+        set(bitset, flag);
+        CHECK_EQ(any(bitset, flag), true);
+        CHECK_EQ(any(bitset, flag1), false);
+        CHECK_EQ(any(bitset, flag2), false);
+        CHECK_EQ(any(bitset, flag3), false);
+
+        set(bitset1, flag1);
+        CHECK_EQ(any(bitset1, flag), false);
+        CHECK_EQ(any(bitset1, flag1), true);
+        CHECK_EQ(any(bitset1, flag2), false);
+        CHECK_EQ(any(bitset1, flag3), false);
+
+        set(bitset2, flag2);
+        CHECK_EQ(any(bitset2, flag), false);
+        CHECK_EQ(any(bitset2, flag1), false);
+        CHECK_EQ(any(bitset2, flag2), true);
+        CHECK_EQ(any(bitset2, flag3), false);
+
+        set(bitset3, flag3);
+        CHECK_EQ(any(bitset3, flag), false);
+        CHECK_EQ(any(bitset3, flag1), false);
+        CHECK_EQ(any(bitset3, flag2), false);
+        CHECK_EQ(any(bitset3, flag3), true);
+    }
+
+    SUBCASE(R"(clear(uint16_t &bitset, uint16_t flag))") {
+        uint16_t bitset = 1 << 3; // 1000
+        uint16_t bitset1 = 1 << 2;// 0100
+        uint16_t bitset2 = 1 << 1;// 0010
+        uint16_t bitset3 = 1 << 0;// 0001
+
+        const uint16_t flag = 1 << 0; // 0001
+        const uint16_t flag1 = 1 << 1;// 0010
+        const uint16_t flag2 = 1 << 2;// 0100
+        const uint16_t flag3 = 1 << 3;// 1000
+
+        set(bitset, flag); // 1001
+        clear(bitset, flag3); // 0001
+        CHECK_EQ(any(bitset, flag), true);
+        CHECK_EQ(any(bitset, flag1), false);
+        CHECK_EQ(any(bitset, flag2), false);
+        CHECK_EQ(any(bitset, flag3), false);
+
+        set(bitset1, flag1); // 0110
+        clear(bitset1, flag2);// 0010
+        CHECK_EQ(any(bitset1, flag), false);
+        CHECK_EQ(any(bitset1, flag1), true);
+        CHECK_EQ(any(bitset1, flag2), false);
+        CHECK_EQ(any(bitset1, flag3), false);
+
+        set(bitset2, flag2); // 0110
+        clear(bitset2, flag1);// 0100
+        CHECK_EQ(any(bitset2, flag), false);
+        CHECK_EQ(any(bitset2, flag1), false);
+        CHECK_EQ(any(bitset2, flag2), true);
+        CHECK_EQ(any(bitset2, flag3), false);
+
+        set(bitset3, flag3); // 1001
+        clear(bitset3, flag);// 1000
+        CHECK_EQ(any(bitset3, flag), false);
+        CHECK_EQ(any(bitset3, flag1), false);
+        CHECK_EQ(any(bitset3, flag2), false);
+        CHECK_EQ(any(bitset3, flag3), true);
+    }
+}
+
+TEST_CASE(R"(contains)") {
+    uint16_t bitset1 = 0b0000000000000111;
+    uint16_t flag001 = 0b0000000000000001;
+    uint16_t flag002 = 0b0000000000000010;
+
+    uint16_t bitset2 = 0b0000000000000111;
+    uint16_t flag003 = 0b0000000000001010;
+
+    uint16_t bitset3 = 0b0000000000000011;
+
+
+    CHECK_EQ(mutl::bit::has(bitset1, flag001 | flag002), true);
+    CHECK_EQ(mutl::bit::has(bitset2, flag001 | flag003), false);
+    CHECK_EQ(mutl::bit::has(bitset3, flag001 | flag002), true);
 }
 
 /*

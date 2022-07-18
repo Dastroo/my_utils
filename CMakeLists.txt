@@ -6,15 +6,13 @@ set(CMAKE_CXX_STANDARD 17)
 enable_testing()
 add_subdirectory(unit_tests)
 
-add_library(my_utils
-        include/StringUtils.h
-        include/OSUtils.h
+add_library(${PROJECT_NAME}
+        include/StringUtils.h src/StringUtils.cpp
+        include/OSUtils.h src/OSUtils.cpp
         include/ArgumentUtils.h
         include/Time.h
-        include/Bit.h
-        src/StringUtils.cpp
-        src/OSUtils.cpp
-        src/Bit.cpp)
+        include/Bit.h src/Bit.cpp
+        )
 
 #   INSTALL
 if (UNIX AND NOT APPLE)

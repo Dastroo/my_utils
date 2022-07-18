@@ -6,12 +6,12 @@
 
 namespace mutl {
 
-    char *get_home_path();
+char *get_home_path();
 
-    bool is_linux();
+bool is_linux();
 
-    bool is_windows();
+bool is_windows();
 
-    bool is_elevated();
+bool is_elevated();
 
-} // mutl
+} // namespace mutl

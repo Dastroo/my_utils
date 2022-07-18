@@ -22,7 +22,7 @@ namespace mutl::time {
     typedef std::chrono::hours h;
 
     /**
-     * get current time since epoch (1970) in your desired unit of time
+     * any current time since epoch (1970) in your desired unit of time
      * @tparam T hours | minutes | seconds | microseconds | milliseconds | nanoseconds
      * @return unsigned long int | uint64_t units_of_time since epoch
      * @example
@@ -30,7 +30,7 @@ namespace mutl::time {
      * now\<sec>();
      */
     template<typename T>
-    static uint64_t now() {
+    uint64_t now() {
         using namespace std::chrono;
         return time_point_cast<T>(system_clock::now()).time_since_epoch().count();
     }
